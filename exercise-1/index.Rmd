@@ -1,0 +1,40 @@
+---
+title: "Exercise 12-1"
+output: html_document
+---
+
+```{r, include=FALSE}
+library(plotly)
+```
+
+This is a map showing Consumer Price Index (CPI) in countries around the world.
+
+```{r, echo=FALSE}
+
+df <- read.csv('https://raw.githubusercontent.com/datasets/cpi/master/data/cpi.csv')
+df <- df[df$Year == 2014,]
+
+# light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+
+plot_geo(df) %>%
+  add_trace(
+    z = ~CPI, color = ~CPI, colors = 'Blues',
+    text = ~Country.Name, locations = ~Country.Code, marker = list(line = l)
+  ) %>%
+  colorbar(title = 'CPI') %>%
+  layout(
+    title = '2014 Global CPI<br>Source:<a href="https://github.com/datasets/cpi">GitHub CPI Dataset</a>',
+    geo = g
+  )
+```
+
+
+
